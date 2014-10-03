@@ -28,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tilt"  
   spec.add_dependency "helmet"
   
-  spec.add_dependency 'actn-db', '~> 0.0.3'
-  spec.add_dependency 'actn-jobs', '~> 0.0.3'
+  # spec.add_dependency 'actn-db', '~> 0.0.3'
+  # spec.add_dependency 'actn-jobs', '~> 0.0.3'
 end
