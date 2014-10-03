@@ -1,4 +1,4 @@
-require 'goliath'
+require 'goliath/api'
 require 'actn/db/set'
 require 'actn/api/client'
 require 'actn/api/mw/auth'

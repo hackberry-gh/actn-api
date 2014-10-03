@@ -1,36 +1,45 @@
 #!/usr/bin/env ruby
-
-abort unless api_name = ARGV.shift
-if api_name == "console"
-  api_name = "public/query"
-  ARGV << "-C"
-  require "actn/db"
-  require "actn/jobs"
-end
+# $LOAD_PATH.unshift File.expand_path(Actn::Api.gem_root)
 
 $stdout.sync = true
 $stderr.sync = true
 
-$LOAD_PATH.unshift File.expand_path('../', __FILE__)
-$LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
-
 ENV['DATABASE_URL'] ||= "postgres://localhost:5432/actn_#{ENV['RACK_ENV'] ||= "development"}" 
 
+abort unless api_name = ARGV.shift
+
+if api_name == "console"
+  require "actn/api"  
+  require "actn/db"
+  require "actn/jobs"  
+  api_name = "public/query"
+  ARGV << "-c"
+  ARGV << "#{Actn::Api.gem_root}/config/common.rb"    
+  ARGV << "-C"
+else
+  require "actn/api"  
+  ARGV << "-c"
+  ARGV << "#{Actn::Api.gem_root}/config/#{api_name.split("/").first}.rb"
+end
+
+
+
 require 'i18n'
-require "actn/api"
 require "active_support/inflector"
+
 require "goliath/api"
 require "goliath/runner"
-require "#{api_name}"
 
-unless api_name == "console"
-  ARGV[ARGV.length-1] = "#{Actn::Api.gem_root}/#{ARGV[ARGV.length-1]}"
-end
+require "#{Actn::Api.gem_root}/apis/#{api_name}"
 
 I18n.enforce_available_locales = false
 
 api_class = api_name.classify.demodulize.constantize  
+
 runner = Goliath::Runner.new(ARGV, nil)
+
+# puts runner.inspect
+
 runner.api = api_class.new
 runner.app = Goliath::Rack::Builder.build(api_class, runner.api)
 runner.run
