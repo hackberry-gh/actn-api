@@ -3,9 +3,9 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 $stdout.sync = true
 $stderr.sync = true
 
-ENV['RACK_ENV']='test'
-ENV['DATABASE_URL']="postgres://localhost:5432/actn_test"
-ENV['SECRET']="secret"
+ENV['RACK_ENV'] = 'test'
+ENV['DATABASE_URL'] ||= "postgres://localhost:5432/actn_test"
+ENV['SECRET'] = "secret"
 
 require 'actn/api'
 require 'actn/db'
