@@ -14,3 +14,7 @@ I18n.enforce_available_locales = false
 ::User   = Actn::Api::User   unless Object.const_defined? "User" 
 ::Model  = Actn::DB::Model   unless Object.const_defined? "Model"
 ::Job    = Actn::Jobs::Job   unless Object.const_defined? "Job"
+
+config[:template] = {
+ :views => "#{Actn::Api.gem_root}/views",
+}

@@ -9,7 +9,7 @@ require 'actn/api/goliath/params'
 
 module Actn
   module Api
-    class Public < Goliath::API
+    class Cors < Goliath::API
     
       CT_JS = { 'Content-Type' => 'application/javascript' }
       CT_JSON = {'Content-Type' => 'application/json'}

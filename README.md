@@ -1,6 +1,6 @@
 # Actn::Api
 
-Actn.io Core & Public APIs
+Actn.io Core & Cors APIs
 
 ## Installation
 
