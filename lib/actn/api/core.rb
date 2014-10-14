@@ -12,16 +12,16 @@ module Actn
     class Core < Helmet::API
   
       OK = '{"success": true}'
-  
+      
       def self.inherited base
 
         base.init
         
         super
-        
+
         base.use Goliath::Rack::Params
         base.use Goliath::Rack::Heartbeat
-  
+
         base.use Mw::NoXSS
         base.use Rack::Session::Cookie, secret: ENV['SECRET']
         base.use Rack::Csrf, skip_if: proc { |request| 
@@ -31,5 +31,6 @@ module Actn
       end
           
     end
+
   end
 end

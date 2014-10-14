@@ -4,25 +4,9 @@
 $stdout.sync = true
 $stderr.sync = true
 
-ENV['DATABASE_URL'] ||= "postgres://localhost:5432/actn_#{ENV['RACK_ENV'] ||= "development"}" 
+ENV['DATABASE_URL'] ||= "postgres://localhost:5432/actn_#{ENV['RACK_ENV'] ||= "development"}"
 
 abort unless api_name = ARGV.shift
-
-if api_name == "console"
-  require "actn/api"  
-  require "actn/db"
-  require "actn/jobs"  
-  api_name = "public/query"
-  ARGV << "-c"
-  ARGV << "#{Actn::Api.gem_root}/config/common.rb"    
-  ARGV << "-C"
-else
-  require "actn/api"  
-  ARGV << "-c"
-  ARGV << "#{Actn::Api.gem_root}/config/#{api_name.split("/").first}.rb"
-end
-
-
 
 require 'i18n'
 require "active_support/inflector"
@@ -30,15 +14,32 @@ require "active_support/inflector"
 require "goliath/api"
 require "goliath/runner"
 
-require "#{Actn::Api.root}/apis/#{api_name}"
-
 I18n.enforce_available_locales = false
 
-api_class = api_name.classify.demodulize.constantize  
+if api_name == "console"
+  require "actn/api"  
+  require "actn/api/cors"    
+  require "actn/db"
+  require "actn/jobs"  
+  require "#{Actn::Api.gem_root}/config/common.rb"
+  ARGV << "-c"
+  ARGV << "#{Actn::Api.gem_root}/config/common.rb"    
+  ARGV << "-C"
+  class Console < Actn::Api::Cors; end  
+  api_class = Console
+else
+  require "actn/api"  
+  ARGV << "-c"
+  if File.exists?("#{Actn::Api.root}/config/#{api_name.split("/").first}.rb")
+    ARGV << "#{Actn::Api.root}/config/#{api_name.split("/").first}.rb"
+  else
+    ARGV << "#{Actn::Api.gem_root}/config/common.rb"      
+  end
+  require "#{Actn::Api.root}/apis/#{api_name}"
+  api_class = api_name.classify.demodulize.constantize    
+end
 
 runner = Goliath::Runner.new(ARGV, nil)
-
-# puts runner.inspect
 
 runner.api = api_class.new
 runner.app = Goliath::Rack::Builder.build(api_class, runner.api)
