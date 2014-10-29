@@ -87,7 +87,9 @@ module Actn
         end        
         
         def client_valid?
-          self.client = Client.find_for_auth(host, apikey)
+          self.client = self.secret.nil? ? Client.find_for_auth(host, apikey) : Client.find_by("apikey" => apikey)
+          # puts "VALID? #{self.client.inspect}"
+          self.client
         end
       
         def client_authorized?

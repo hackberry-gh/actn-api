@@ -24,7 +24,7 @@ module Actn
 
         base.use Mw::NoXSS
         base.use Rack::Session::Cookie, secret: ENV['SECRET']
-        base.use Rack::Csrf, skip: ['OPTIONS:/.*'], skip_if: proc { |r| ENV['RACK_ENV'] == "test" }
+        base.use Rack::Csrf, skip: ['OPTIONS:/.*'], skip_if: proc { |r| r.env.key?('HTTP_X_SECRET') || ENV['RACK_ENV'] == "test" }
         base.use Mw::Cors
         base.use Goliath::Rack::BarrierAroundwareFactory, Mw::Auth, exclude: /^\/connect$/
         

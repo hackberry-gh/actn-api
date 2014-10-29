@@ -1,4 +1,4 @@
-require 'tilt/erb' 
+require 'tilt/erb'
 require 'helmet'
 require 'actn/api/helmet/templates'
 
@@ -11,7 +11,7 @@ module Actn
 
         base.init
 
-        base.use Goliath::Rack::DefaultMimeType        
+        base.use Goliath::Rack::DefaultMimeType
         base.use Goliath::Rack::Render
         
         super

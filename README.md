@@ -93,7 +93,7 @@ actn.post({
 actn.get({
   path: "/:set(/:anything/:can/:go/:after/:set)",
   data: {
-    select: 'field,names',
+    select: ['field,names'],
     where:{
       not: { active: true }, 
       or: { age: { ">": 20, "<": 50} }, 
