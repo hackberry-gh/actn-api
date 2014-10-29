@@ -1,9 +1,11 @@
 require 'actn/db/mod'
 require 'actn/core_ext/string'
 require 'tempfile'
+
 module Actn
   module Api
     class Template < DB::Mod
+      
       self.table = "templates"
       self.schema = "core" 
       
