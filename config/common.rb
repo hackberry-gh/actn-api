@@ -8,6 +8,7 @@ require 'actn/db/model'
 require 'actn/jobs/job'
 require 'actn/paths'
 
+Encoding.default_external = Encoding::UTF_8
 Oj.default_options = { time_format: :ruby, mode: :compat }
 I18n.enforce_available_locales = false
 
