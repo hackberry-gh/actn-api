@@ -1,6 +1,6 @@
 SET search_path TO core,public;
 
--- SELECT plv8_startup();
+SELECT plv8_startup();
     
 SELECT __create_table('core','clients');
 SELECT __create_index('core','clients', '{"cols": { "apikey": "text", "domain": "text" },"unique": true}');
